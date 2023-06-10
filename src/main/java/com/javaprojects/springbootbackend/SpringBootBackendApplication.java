@@ -26,5 +26,7 @@ public class SpringBootBackendApplication implements CommandLineRunner {
 	private CourseRepository courseRepository;
 
 	@Override
-	public void run(String... args) throws Exception {}
+	public void run(String... args) throws Exception {
+		//Test
+	}
 }
