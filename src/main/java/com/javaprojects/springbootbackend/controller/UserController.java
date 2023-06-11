@@ -43,6 +43,8 @@ public class UserController {
         user.setFirstName(userDetails.getFirstName());
         user.setLastName(userDetails.getLastName());
         user.setEmail(userDetails.getEmail());
+        user.setAddress(userDetails.getAddress());
+        user.setWorkplace(userDetails.getWorkplace());
         userRepository.save(user);
         return ResponseEntity.ok(user);
     }
