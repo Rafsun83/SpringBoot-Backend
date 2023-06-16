@@ -3,12 +3,16 @@ package com.javaprojects.springbootbackend.controller;
 import com.javaprojects.springbootbackend.excption.ResourceNotFoundException;
 import com.javaprojects.springbootbackend.model.User;
 import com.javaprojects.springbootbackend.repository.UserRepository;
+import com.javaprojects.springbootbackend.excption.RequiredErrorResponse;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/v1/users")
@@ -25,8 +29,13 @@ public class UserController {
 
     //create user build api
     @PostMapping
-    public User createUser(@RequestBody User user){
-        return userRepository.save(user);
+    public ResponseEntity<?> createUser(@Valid @RequestBody User user, BindingResult bindingResult){
+        if(bindingResult.hasErrors()){
+            List<RequiredErrorResponse> error = bindingResult.getFieldErrors().stream().map(fieldError -> new RequiredErrorResponse(fieldError.getField(), fieldError.getDefaultMessage())).collect(Collectors.toList());
+            return ResponseEntity.badRequest().body(error);
+        }
+        User user1 = userRepository.save(user);
+        return ResponseEntity.ok(user1);
     }
 
     //get user by id

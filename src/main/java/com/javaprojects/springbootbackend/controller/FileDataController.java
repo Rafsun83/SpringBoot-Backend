@@ -1,10 +1,7 @@
 package com.javaprojects.springbootbackend.controller;
 
-import com.javaprojects.springbootbackend.model.FileData;
-import com.javaprojects.springbootbackend.service.ApiReturn;
 import com.javaprojects.springbootbackend.service.FileService;
-import com.javaprojects.springbootbackend.service.TestReturnObject;
-import org.antlr.v4.runtime.misc.NotNull;
+import com.javaprojects.springbootbackend.service.FileUploadedResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -13,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.Arrays;
 
 @RestController
 @RequestMapping("/api/v1/fileSystem")
@@ -25,9 +21,9 @@ public class FileDataController {
 
 
     @PostMapping
-    public ResponseEntity<TestReturnObject> uploadFile(@RequestParam("image") MultipartFile file) throws IOException {
+    public ResponseEntity<FileUploadedResponse> uploadFile(@RequestParam("image") MultipartFile file) throws IOException {
         String uploadImage = fileService.uploadFileToFileSystem(file);
-        TestReturnObject response = new TestReturnObject(uploadImage, file.getOriginalFilename(), file.getContentType(), "File Uploaded Successfully", "200");
+        FileUploadedResponse response = new FileUploadedResponse(uploadImage, file.getOriginalFilename(), file.getContentType(), "File Uploaded Successfully", "200");
         return ResponseEntity.ok(response);
 //        return ResponseEntity.status(HttpStatus.OK).body(uploadImage);
 

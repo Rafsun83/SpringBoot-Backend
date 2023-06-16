@@ -1,17 +1,21 @@
 package com.javaprojects.springbootbackend.controller;
 
+import com.javaprojects.springbootbackend.excption.RequiredErrorResponse;
 import com.javaprojects.springbootbackend.excption.ResourceNotFoundException;
 import com.javaprojects.springbootbackend.model.Blog;
 import com.javaprojects.springbootbackend.repository.BlogRepository;
 import com.javaprojects.springbootbackend.service.FileService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/v1/blogs")
@@ -27,8 +31,13 @@ public class BlogController {
     }
 
     @PostMapping
-    public Blog createBlog(@RequestBody Blog blog)  {
-        return blogRepository.save(blog);
+    public ResponseEntity<?> createBlog(@Valid @RequestBody Blog blog, BindingResult bindingResult)  {
+        if (bindingResult.hasErrors()){
+            List<RequiredErrorResponse> error = bindingResult.getFieldErrors().stream().map(fieldError -> new RequiredErrorResponse(fieldError.getField(), fieldError.getDefaultMessage())).collect(Collectors.toList());
+            return ResponseEntity.badRequest().body(error);
+        }
+        Blog blog1 = blogRepository.save(blog);
+        return ResponseEntity.ok(blog1);
 
     }
 

@@ -1,6 +1,6 @@
 package com.javaprojects.springbootbackend.service;
 
-public class TestReturnObject {
+public class FileUploadedResponse {
     private String filePath;
     private String name;
     private String type;
@@ -8,7 +8,7 @@ public class TestReturnObject {
 
     private String code;
 
-    public TestReturnObject(String filePath, String name, String type, String message, String code) {
+    public FileUploadedResponse(String filePath, String name, String type, String message, String code) {
         this.filePath = filePath;
         this.name = name;
         this.type = type;

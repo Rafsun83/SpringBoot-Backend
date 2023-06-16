@@ -1,14 +1,18 @@
 package com.javaprojects.springbootbackend.controller;
 
+import com.javaprojects.springbootbackend.excption.RequiredErrorResponse;
 import com.javaprojects.springbootbackend.excption.ResourceNotFoundException;
 import com.javaprojects.springbootbackend.model.Course;
 import com.javaprojects.springbootbackend.repository.CourseRepository;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/v1/courses")
@@ -24,8 +28,15 @@ public class CourseController {
 
     //create course build api
     @PostMapping
-    public Course createCourse(@RequestBody Course course){
-        return courseRepository.save(course);
+    public ResponseEntity<?> createCourse(@Valid @RequestBody Course course, BindingResult bindingResult){
+        if (bindingResult.hasErrors()){
+            List<RequiredErrorResponse> error = bindingResult.getFieldErrors().stream().map(fieldError -> new RequiredErrorResponse(fieldError.getField(), fieldError.getDefaultMessage())).collect(Collectors.toList());
+            return ResponseEntity.badRequest().body(error);
+        }
+
+
+        Course course1 = courseRepository.save(course);
+        return ResponseEntity.ok(course1);
     }
 
     //get course by id
