@@ -11,8 +11,8 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "workplace")
-public class UserWorkPlace {
+@Table(name = "user_location")
+public class UserLocation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -20,6 +20,4 @@ public class UserWorkPlace {
     @Column(name = "city")
     private String city;
 
-    @Column(name = "zipcode")
-    private Number zipcode;
 }

@@ -36,5 +36,5 @@ public class User {
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "fk_place_id", referencedColumnName = "id")
-    private List<UserWorkPlace> workplace;
+    private List<UserLocation> location;
 }

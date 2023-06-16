@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.engine.internal.Cascade;
 
 @Getter
 @Setter
@@ -23,4 +24,8 @@ public class Blog {
 
     @Column(name = "description")
     private String description;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "fk_file_id", referencedColumnName = "id")
+    private FileData files;
 }

@@ -43,6 +43,7 @@ public class CourseController {
         course.setTitle(courseDetails.getTitle());
         course.setDescription(courseDetails.getDescription());
         course.setPrice(courseDetails.getPrice());
+        course.setFiles(courseDetails.getFiles());
         courseRepository.save((course));
        return ResponseEntity.ok(course);
     }

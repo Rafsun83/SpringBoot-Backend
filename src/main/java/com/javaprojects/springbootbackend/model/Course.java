@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -25,4 +27,8 @@ public class Course {
 
     @Column(name = "price")
     private Number price;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "fk_file_id", referencedColumnName = "id")
+    private List<FileData> files;
 }
