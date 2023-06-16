@@ -1,8 +1,11 @@
 package com.javaprojects.springbootbackend;
 
+import com.javaprojects.springbootbackend.model.Blog;
 import com.javaprojects.springbootbackend.model.Course;
 import com.javaprojects.springbootbackend.model.User;
+import com.javaprojects.springbootbackend.repository.BlogRepository;
 import com.javaprojects.springbootbackend.repository.CourseRepository;
+import com.javaprojects.springbootbackend.repository.FileDataRepository;
 import com.javaprojects.springbootbackend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -25,6 +28,15 @@ public class SpringBootBackendApplication implements CommandLineRunner {
 	@Autowired
 	private CourseRepository courseRepository;
 
+	@Autowired
+	private BlogRepository blogRepository;
+
+	@Autowired
+	private FileDataRepository fileDataRepository;
+
 	@Override
-	public void run(String... args) throws Exception {}
+	public void run(String... args) throws Exception {
+		//Test 5
+
+	}
 }

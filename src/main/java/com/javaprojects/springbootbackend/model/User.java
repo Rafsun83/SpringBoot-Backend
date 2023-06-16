@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -26,4 +28,13 @@ public class User {
 
     @Column(name = "email")
     private String email;
+
+    //add address_id
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "fk_add_id")
+    private UserAddress address;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "fk_place_id", referencedColumnName = "id")
+    private List<UserLocation> location;
 }

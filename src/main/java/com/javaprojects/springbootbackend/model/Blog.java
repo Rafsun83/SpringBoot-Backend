@@ -5,19 +5,19 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.util.List;
+import org.hibernate.engine.internal.Cascade;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "courses")
-public class Course {
+@Table(name = "blogs")
+public class Blog {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private long id;
 
     @Column(name = "title")
     private String title;
@@ -25,10 +25,7 @@ public class Course {
     @Column(name = "description")
     private String description;
 
-    @Column(name = "price")
-    private Number price;
-
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "fk_file_id", referencedColumnName = "id")
-    private List<FileData> files;
+    private FileData files;
 }
