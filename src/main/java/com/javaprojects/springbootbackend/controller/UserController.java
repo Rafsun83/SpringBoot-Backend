@@ -4,11 +4,13 @@ import com.javaprojects.springbootbackend.excption.ResourceNotFoundException;
 import com.javaprojects.springbootbackend.model.User;
 import com.javaprojects.springbootbackend.repository.UserRepository;
 import com.javaprojects.springbootbackend.excption.RequiredErrorResponse;
+import com.javaprojects.springbootbackend.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,6 +22,9 @@ public class UserController {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private UserService userService;
 
 
     @GetMapping
@@ -34,7 +39,7 @@ public class UserController {
             List<RequiredErrorResponse> error = bindingResult.getFieldErrors().stream().map(fieldError -> new RequiredErrorResponse(fieldError.getField(), fieldError.getDefaultMessage())).collect(Collectors.toList());
             return ResponseEntity.badRequest().body(error);
         }
-        User user1 = userRepository.save(user);
+        User user1 = userService.createUserService(user).getBody();
         return ResponseEntity.ok(user1);
     }
 
@@ -47,11 +52,17 @@ public class UserController {
 
     //update user in Rest API
     @PutMapping("{id}")
-    public ResponseEntity<User> updateUser(@PathVariable long id, @RequestBody User userDetails){
+    public ResponseEntity<?> updateUser(@PathVariable long id, @Valid @RequestBody User userDetails, BindingResult bindingResult){
+        if(bindingResult.hasErrors()){
+            List<RequiredErrorResponse> error = bindingResult.getFieldErrors().stream().map(fieldError -> new RequiredErrorResponse(fieldError.getField(), fieldError.getDefaultMessage())).collect(Collectors.toList());
+            System.out.print(error);
+            return ResponseEntity.badRequest().body(error);
+        }
         User user = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("User not exits" + id));
         user.setFirstName(userDetails.getFirstName());
         user.setLastName(userDetails.getLastName());
         user.setEmail(userDetails.getEmail());
+        user.setPassword(userDetails.getPassword());
         user.setAddress(userDetails.getAddress());
         user.setLocation(userDetails.getLocation());
         userRepository.save(user);
