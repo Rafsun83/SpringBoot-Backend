@@ -1,20 +1,13 @@
 package com.javaprojects.springbootbackend.excption;
 
-public class ApplicationError {
+public class ApiResponse {
     private int code;
     private String message;
 
-//    public ApplicationError(int code , String message){
-//        this.code = code;
-//        this.message = message;
-//    }
-
-    public int getCode() {
-        return code;
-    }
-
-    public void setCode(int code) {
+    public ApiResponse(int code , String message){
         this.code = code;
+        this.message = message;
+
     }
 
     public String getMessage() {
@@ -23,5 +16,13 @@ public class ApplicationError {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public int getCode() {
+        return code;
+    }
+
+    public void setCode(int code) {
+        this.code = code;
     }
 }
