@@ -1,16 +1,13 @@
 package com.javaprojects.springbootbackend.controller;
 
-import com.javaprojects.springbootbackend.excption.ResourceNotFoundException;
+import com.javaprojects.springbootbackend.excption.ApiResponse;
 import com.javaprojects.springbootbackend.model.User;
-import com.javaprojects.springbootbackend.repository.UserRepository;
 import com.javaprojects.springbootbackend.excption.RequiredErrorResponse;
 import com.javaprojects.springbootbackend.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,16 +17,20 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/v1/users")
 public class UserController {
 
-    @Autowired
-    private UserRepository userRepository;
+
 
     @Autowired
     private UserService userService;
 
+//    public UserController(UserService userService) {
+//        this.userService = userService;
+//    }
+
 
     @GetMapping
     public List<User> getAllUser(){
-        return userRepository.findAll();
+        return userService.getAllUsersService();
+//        return userRepository.findAll();
     }
 
     //create user build api
@@ -46,7 +47,7 @@ public class UserController {
     //get user by id
     @GetMapping("{id}")
     public ResponseEntity<User> getUserById(@PathVariable long id){
-        User user = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("User not Exits" + id));
+        User user = userService.getUserByIdService(id).getBody();
         return ResponseEntity.ok(user);
     }
 
@@ -58,22 +59,23 @@ public class UserController {
             System.out.print(error);
             return ResponseEntity.badRequest().body(error);
         }
-        User user = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("User not exits" + id));
-        user.setFirstName(userDetails.getFirstName());
-        user.setLastName(userDetails.getLastName());
-        user.setEmail(userDetails.getEmail());
-        user.setPassword(userDetails.getPassword());
-        user.setAddress(userDetails.getAddress());
-        user.setLocation(userDetails.getLocation());
-        userRepository.save(user);
-        return ResponseEntity.ok(user);
+        userService.updateUserService(id, userDetails);
+        ApiResponse apiResponse = new ApiResponse(200, "User updated successfully");
+        return ResponseEntity.ok(apiResponse);
     }
 
     //delete user in REST API
     @DeleteMapping("{id}")
-    public ResponseEntity<HttpStatus> deleteUser(@PathVariable long id){
-        User user = userRepository.findById(id).orElseThrow(() ->new ResourceNotFoundException("This user not exist here: " + id));
-        userRepository.delete(user);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    public ResponseEntity<ApiResponse> deleteUser(@PathVariable long id){
+        userService.deleteUserService(id);
+        ApiResponse apiResponse = new ApiResponse(200, "User deleted successfully");
+        return ResponseEntity.ok(apiResponse);
     }
+
+    @GetMapping("/name/{name}")
+    public List<User> getUsersByName(@PathVariable String name){
+        return userService.getUserByFirstName(name);
+    }
+
+
 }
